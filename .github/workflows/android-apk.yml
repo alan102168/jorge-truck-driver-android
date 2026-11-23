@@ -1,4 +1,4 @@
-name: Gerar APK Android
+name: Android Pixel Art - Compilar APK
 on:
   push:
     branches: [main]
@@ -24,11 +24,16 @@ jobs:
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
       - name: Compilar APK
         run: gradle --no-daemon assembleDebug
+      - name: Identificar arquivo do APK
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/app-debug.apk dist/Jorge-Android-Pixel.apk
+
       - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
         with:
-          name: Jorge-Pixel-Edition-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: Jorge-Android-Pixel-APK
+          path: dist/Jorge-Android-Pixel.apk
           if-no-files-found: error
 
       - name: Publicar APK em Releases
@@ -36,7 +41,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "pixel-v2.0.${{ github.run_number }}" \
-            app/build/outputs/apk/debug/app-debug.apk#Jorge-Pixel-Edition.apk \
+            dist/Jorge-Android-Pixel.apk \
             --title "Jorge Pixel Edition Android v2.0.${{ github.run_number }}" \
             --notes "Pixel Edition 16 bits com controles e layout TV/celular. APK de teste. Instala ao lado do jogo Android anterior." \
             --target "$GITHUB_SHA"
