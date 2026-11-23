@@ -15,12 +15,12 @@ jobs:
           distribution: temurin
           java-version: '17'
       - name: Aceitar licencas do Android SDK
-        run: yes | sdkmanager --licenses || true
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
       - name: Instalar SDK Android 35
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        run: "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
       - name: Compilar APK
         run: gradle --no-daemon assembleDebug
       - name: Disponibilizar APK
