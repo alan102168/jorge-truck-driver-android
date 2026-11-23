@@ -6,7 +6,7 @@
 
 **[Ver Releases do Android Pixel Art](https://github.com/alan102168/jorge-truck-driver-android/releases)**
 
-Procure um Release com nome `pixel-v2.0.x` e baixe o APK. Ele é uma **versão de teste**.
+Procure um Release com nome `pixel-v2.0.x` e baixe o arquivo `Jorge-Android-Pixel.apk` (em versões antigas, `app-debug.apk`). Ele é uma **versão de teste**.
 
 **[Ver compilações automáticas](https://github.com/alan102168/jorge-truck-driver-android/actions)**
 
@@ -18,6 +18,8 @@ Procure um Release com nome `pixel-v2.0.x` e baixe o APK. Ele é uma **versão d
 - Controle por toque ou gamepad reconhecido pelo Android (USB/Bluetooth/receptor).
 - O HDMI é somente a saída de imagem/som, não um sistema de jogos.
 - **Identificador do app:** `br.com.jorgetruckdriver.android.pixel`, diferente do Android Normal.
+
+**Importante:** use a branch `main` para novas alterações. As branches antigas `android-normal` e `android-pixel` são apenas histórico da migração.
 
 ### 📁 Estrutura
 
