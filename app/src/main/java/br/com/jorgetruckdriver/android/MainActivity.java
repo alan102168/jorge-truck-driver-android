@@ -57,14 +57,12 @@ public class MainActivity extends Activity {
             case KeyEvent.KEYCODE_BUTTON_R2: pedal(true,pressed);return true;
             case KeyEvent.KEYCODE_BUTTON_L2: pedal(false,pressed);return true;
             case KeyEvent.KEYCODE_BUTTON_A:
-            case KeyEvent.KEYCODE_BUTTON_CROSS:
                 if(pressed) js("document.getElementById('iniciar')?.click()");
                 return true;
             case KeyEvent.KEYCODE_BUTTON_START:
                 if(pressed) key("p",true);
                 return true;
             case KeyEvent.KEYCODE_BUTTON_Y:
-            case KeyEvent.KEYCODE_BUTTON_TRIANGLE:
                 if(pressed) js("document.getElementById('reiniciar')?.click()");
                 return true;
             default:return super.dispatchKeyEvent(e);
