@@ -1,7 +1,7 @@
-name: Gerar APK Android
+name: Android Pixel Art - Gerar APK
 on:
   push:
-    branches: [main]
+    branches: [android-pixel]
   workflow_dispatch:
 jobs:
   build:
