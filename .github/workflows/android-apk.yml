@@ -1,7 +1,7 @@
-name: Gerar APK Android
+name: Android Normal - Gerar APK
 on:
   push:
-    branches: [main]
+    branches: [android-normal]
   workflow_dispatch:
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
       - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
         with:
-          name: Jorge-Truck-Driver-APK
+          name: Jorge-Android-Normal-APK
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
 
@@ -35,8 +35,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "v1.0.${{ github.run_number }}" \
-            app/build/outputs/apk/debug/app-debug.apk#Jorge-Truck-Driver.apk \
-            --title "Jorge Truck Driver Android v1.0.${{ github.run_number }}" \
+          gh release create "android-normal-v1.0.${{ github.run_number }}" \
+            app/build/outputs/apk/debug/app-debug.apk#Jorge-Android-Normal.apk \
+            --title "Jorge Truck Driver - Android Normal v1.0.${{ github.run_number }}" \
             --notes "Versao de teste Android. APK de debug para instalacao e testes." \
             --target "$GITHUB_SHA"
