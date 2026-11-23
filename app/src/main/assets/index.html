@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Caminhão pelo Rio - Entregas</title>
+<title>Jorge Truck Driver - Pixel Edition</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#14202d;color:#fff;font-family:Arial,sans-serif;text-align:center;padding:12px}
@@ -11,7 +11,7 @@ h1{font-size:24px;color:#ffd15e;margin:6px}
 #hud{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:12px 0}
 #hud span{background:#293e50;padding:9px 12px;border-radius:8px}
 #area{position:relative;max-width:900px;margin:auto}
-canvas{display:block;width:100%;background:#87ceeb;border:3px solid #71818f;border-radius:10px}
+canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block;width:100%;background:#87ceeb;border:3px solid #71818f;border-radius:10px}
 #menu{position:absolute;inset:0;background:rgba(7,17,27,.88);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;border-radius:10px}
 button{background:#ffd15e;border:0;border-radius:9px;padding:13px 23px;font-size:17px;font-weight:bold;cursor:pointer;touch-action:none}
 #botoes{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:15px}
@@ -37,7 +37,7 @@ button{background:#ffd15e;border:0;border-radius:9px;padding:13px 23px;font-size
 </style>
 </head>
 <body>
-<h1>🚛 CAMINHÃO PELO RIO</h1>
+<h1>🚛 CAMINHÃO PELO RIO • PIXEL EDITION</h1>
 <div id="hud">
   <span>❤️ <b id="vidas">5</b></span>
   <span>⭐ <b id="pontos">0</b></span>
@@ -65,7 +65,15 @@ button{background:#ffd15e;border:0;border-radius:9px;padding:13px 23px;font-size
 
 <script>
 const canvas=document.getElementById("jogo");
-const ctx=canvas.getContext("2d");
+// Desenha diretamente em resolucao baixa, no estilo pixel art de jogos 16 bits.
+// O canvas visivel continua em 900x500 para o layout e os comandos por toque.
+const telaCtx=canvas.getContext("2d");
+const pixels=document.createElement("canvas");
+pixels.width=300; pixels.height=167;
+const ctx=pixels.getContext("2d",{alpha:false});
+ctx.scale(pixels.width/900,pixels.height/500);
+ctx.imageSmoothingEnabled=false;
+telaCtx.imageSmoothingEnabled=false;
 const $=id=>document.getElementById(id);
 const W=900,H=500;
 
@@ -1073,7 +1081,11 @@ function desenhar(){
 function loop(agora){
   const dt=ultimo?Math.min((agora-ultimo)/1000,.04):0;
   ultimo=agora;
-  try{lerControles();atualizar(dt);desenhar()}catch(e){console.error(e)}
+  try{
+    lerControles(); atualizar(dt); desenhar();
+    telaCtx.imageSmoothingEnabled=false;
+    telaCtx.drawImage(pixels,0,0,canvas.width,canvas.height);
+  }catch(e){console.error(e)}
   requestAnimationFrame(loop);
 }
 
