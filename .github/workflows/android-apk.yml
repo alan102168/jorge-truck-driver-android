@@ -27,7 +27,7 @@ jobs:
       - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
         with:
-          name: Jorge-Truck-Driver-APK
+          name: Jorge-Pixel-Edition-APK
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
 
@@ -35,8 +35,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "v1.0.${{ github.run_number }}" \
-            app/build/outputs/apk/debug/app-debug.apk#Jorge-Truck-Driver.apk \
-            --title "Jorge Truck Driver Android v1.0.${{ github.run_number }}" \
-            --notes "Versao de teste Android. APK de debug para instalacao e testes." \
+          gh release create "pixel-v2.0.${{ github.run_number }}" \
+            app/build/outputs/apk/debug/app-debug.apk#Jorge-Pixel-Edition.apk \
+            --title "Jorge Pixel Edition Android v2.0.${{ github.run_number }}" \
+            --notes "Pixel Edition 16 bits com controles e layout TV/celular. APK de teste. Instala ao lado do jogo Android anterior." \
             --target "$GITHUB_SHA"
