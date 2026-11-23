@@ -19,6 +19,8 @@ Procure um Release com nome `pixel-v2.0.x` e baixe o arquivo `Jorge-Android-Pixe
 - O HDMI é somente a saída de imagem/som, não um sistema de jogos.
 - **Identificador do app:** `br.com.jorgetruckdriver.android.pixel`, diferente do Android Normal.
 
+**Atenção aos Releases históricos:** versões com etiquetas `v1.0.x` são da fase anterior do projeto. Para o aplicativo Pixel Art, escolha apenas Releases `pixel-v2.0.x`.
+
 **Importante:** use a branch `main` para novas alterações. As branches antigas `android-normal` e `android-pixel` são apenas histórico da migração.
 
 ### 📁 Estrutura
