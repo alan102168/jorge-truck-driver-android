@@ -16,6 +16,24 @@ canvas{display:block;width:100%;background:#87ceeb;border:3px solid #71818f;bord
 button{background:#ffd15e;border:0;border-radius:9px;padding:13px 23px;font-size:17px;font-weight:bold;cursor:pointer;touch-action:none}
 #botoes{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:15px}
 #regiao{color:#ffd15e;font-size:18px;margin:10px}
+/* Adapta a interface a telas grandes HDMI e celulares em modo paisagem. */
+@media (min-width:1200px) and (min-height:700px) {
+  #area {max-width:min(1600px,92vw)}
+  canvas {max-height:calc(100dvh - 240px);object-fit:contain}
+}
+@media (orientation:landscape) and (max-height:650px) {
+  body {padding:3px}
+  h1, #regiao, body>p {display:none}
+  #hud {margin:3px 0;gap:4px}
+  #hud span {font-size:12px;padding:4px 7px}
+  #area {max-width:min(900px, calc((100dvh - 118px)*1.8))}
+  #menu {padding:6px}
+  #menu h2 {margin:3px;font-size:18px}
+  #menu p {margin:3px;font-size:12px}
+  #menu button {padding:6px 14px;font-size:14px}
+  #botoes {margin:4px;gap:5px}
+  #botoes button {padding:6px 10px;font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -137,13 +155,29 @@ botao("frear","a");
 botao("subir","_u",()=>mudarFaixa(-1));
 botao("descer","_d",()=>mudarFaixa(1));
 
+// Comandos enviados pelo Android quando o controle usa USB, Bluetooth ou dongle.
+// A entrada nativa funciona mesmo onde a Gamepad API nao esta disponivel no WebView.
+window.controleAndroid=function(acao,pressionado){
+  if(acao==="limpar"){
+    teclas.androidAcelerar=false;
+    teclas.androidFrear=false;
+    return;
+  }
+  if(acao==="acelerar") teclas.androidAcelerar=!!pressionado;
+  else if(acao==="frear") teclas.androidFrear=!!pressionado;
+  else if(pressionado && acao==="subir") mudarFaixa(-1);
+  else if(pressionado && acao==="descer") mudarFaixa(1);
+  else if(pressionado && acao==="iniciar" && !jogando) iniciar();
+  else if(pressionado && acao==="pausar" && jogando) pausado=!pausado;
+  else if(pressionado && acao==="reiniciar") iniciar();
+};
 // ---------- CONTROLES USB / BLUETOOTH / WIRELESS ----------
 // Gamepad API: controles Xbox, PlayStation e genéricos reconhecidos pelo navegador.
 // O teclado continua funcionando ao mesmo tempo.
 let controleAnterior={subir:false,descer:false,iniciar:false,pausar:false,reiniciar:false};
 let controleIndice=null;
 function lerControles(){
-  const lista=navigator.getGamepads?navigator.getGamepads():[];
+  let lista=[]; try{lista=navigator.getGamepads?navigator.getGamepads():[]}catch(e){lista=[];}
   let gp=null;
   for(const item of lista){if(item&&item.connected){gp=item;break}}
   if(!gp){
@@ -159,10 +193,10 @@ function lerControles(){
   const cima=botao(12)||eixoVertical<-.55;
   const baixo=botao(13)||eixoVertical>.55;
   // RT/R2 e LT/L2; gatilhos analógicos também são aceitos.
-  teclas.gpAcelerar=botao(7)||valor(7)>.15;
-  teclas.gpFrear=botao(6)||valor(6)>.15;
-  const iniciarJogo=botao(0); // A (Xbox), X (PlayStation), botão principal
-  const pausa=botao(9);       // Menu / Options / Start
+  teclas.gpAcelerar=botao(7)||valor(7)>.15||botao(5);
+  teclas.gpFrear=botao(6)||valor(6)>.15||botao(4);
+  const iniciarJogo=botao(0)||(gp.mapping!=="standard"&&botao(1)); // A (Xbox), X (PlayStation), botão principal
+  const pausa=botao(9)||(gp.mapping!=="standard"&&botao(8));       // Menu / Options / Start
   const reiniciarJogo=botao(3); // Y / Triângulo (mapeamento padrão)
   if(cima&&!controleAnterior.subir)mudarFaixa(-1);
   if(baixo&&!controleAnterior.descer)mudarFaixa(1);
@@ -265,8 +299,8 @@ function atualizar(dt){
     som(660,.25,"triangle",.06);
   }
 
-  if(teclas.d||teclas.arrowright||teclas.gpAcelerar)velocidade+=90*dt;else velocidade-=24*dt;
-  if(teclas.a||teclas.arrowleft||teclas.gpFrear)velocidade-=160*dt;
+  if(teclas.d||teclas.arrowright||teclas.gpAcelerar||teclas.androidAcelerar)velocidade+=90*dt;else velocidade-=24*dt;
+  if(teclas.a||teclas.arrowleft||teclas.gpFrear||teclas.androidFrear)velocidade-=160*dt;
   const maxVel=Math.min(180,110+fase*8);
   velocidade=limitar(velocidade,0,maxVel);
 
